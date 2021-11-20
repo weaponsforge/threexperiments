@@ -1,4 +1,4 @@
-import * as THREE from '../threejs/r134/build/three.module.js'
+import * as THREE from '../vendor/three/build/three.module.js'
 
 let renderer
 let camera
