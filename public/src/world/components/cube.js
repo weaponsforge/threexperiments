@@ -2,17 +2,25 @@ import {
   BoxBufferGeometry,
   MeshStandardMaterial,
   MathUtils,
-  Mesh
+  Mesh,
+  TextureLoader
 } from '../../../vendor/three/build/three.module.js'
+
+const createMaterial = () => {
+  const textureLoader = new TextureLoader()
+  const texture = textureLoader.load('../assets/uv-test-bw.png')
+
+  // Material
+  const material = new MeshStandardMaterial({ map: texture })
+  return material
+}
 
 const createCube = () => {
   // Geometry
   const geometry = new BoxBufferGeometry(2, 2, 2)
 
-  // Material
-  const material = new MeshStandardMaterial({ color: 'purple' })
-
   // Mesh
+  const material = createMaterial()
   const cube = new Mesh(geometry, material)
   const tilt = MathUtils.degToRad(45)
   cube.rotation.set(tilt, tilt, 0)
