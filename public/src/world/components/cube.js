@@ -10,13 +10,20 @@ const createCube = () => {
   const geometry = new BoxBufferGeometry(2, 2, 2)
 
   // Material
-  const material = new MeshStandardMaterial({ color: 'darkgoldenrod' })
+  const material = new MeshStandardMaterial({ color: 'purple' })
 
   // Mesh
   const cube = new Mesh(geometry, material)
-  // cube.rotation.set(-0.5, -0.1, 0.8)
   const tilt = MathUtils.degToRad(45)
   cube.rotation.set(tilt, tilt, 0)
+
+  const radiansPerSec = MathUtils.degToRad(30)  // 0.01
+  cube.tick = (delta) => {
+    cube.rotation.x += radiansPerSec * delta
+    cube.rotation.y += radiansPerSec * delta
+    cube.rotation.z += radiansPerSec * delta
+  }
+
   return cube
 }
 
