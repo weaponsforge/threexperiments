@@ -4,7 +4,7 @@ import {
 } from '../../../vendor/three/build/three.module.js'
 
 const createLight = () => {
-  const ambientLight = new HemisphereLight('red', 'darkslategrey', 2)
+  const ambientLight = new HemisphereLight('white', 'darkslategrey', 2)
   ambientLight.position.set(2, 0, 0)
 
   const mainLight = new DirectionalLight('white', 5)
