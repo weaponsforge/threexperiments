@@ -17,11 +17,27 @@ const createCube = () => {
   const tilt = MathUtils.degToRad(45)
   cube.rotation.set(tilt, tilt, 0)
 
+  let direction = 'left'
+
   const radiansPerSec = MathUtils.degToRad(30)  // 0.01
   cube.tick = (delta) => {
     cube.rotation.x += radiansPerSec * delta
     cube.rotation.y += radiansPerSec * delta
     cube.rotation.z += radiansPerSec * delta
+
+    const posX = Math.floor(cube.position.x)
+
+    if (posX >= -2 && direction === 'left') {
+      cube.position.x -= delta * 1
+    } else {
+      direction = 'right'
+    }
+
+    if (posX < 2 && direction === 'right') {
+      cube.position.x += delta * 1
+    } else {
+      direction = 'left'
+    }
   }
 
   return cube
