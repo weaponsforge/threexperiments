@@ -38,6 +38,9 @@ class World {
     loop.updatables.push(controls)
     // loop.updatables.push(cube)
     const resizer = new Resizer(container, camera, renderer)
+    resizer.onResize = () => {
+      this.render()
+    }
 
     // Render on demand (user zoom/rotate/pan)
     this.render()
