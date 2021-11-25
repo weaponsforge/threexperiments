@@ -14,11 +14,8 @@ const server = () => {
 // Files to watch
 const watch = () => {
   gulp.watch(`${root}/*.html`).on('change', browserSync.reload)
-  gulp.watch(`${root}/styles/*.css`).on('change', browserSync.reload)
-  gulp.watch(`${root}/src/*.js`).on('change', browserSync.reload)
-  gulp.watch(`${root}/src/world/*.js`).on('change', browserSync.reload)
-  gulp.watch(`${root}/src/world/components/*.js`).on('change', browserSync.reload)
-  gulp.watch(`${root}/src/world/systems/*.js`).on('change', browserSync.reload)
+  gulp.watch(`${root}/styles/**/*.css`).on('change', browserSync.reload)
+  gulp.watch(`${root}/src/**/*.js`).on('change', browserSync.reload)
 }
 
 // Gulp tasks
