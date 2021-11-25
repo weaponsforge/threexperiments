@@ -30,7 +30,14 @@ class World {
     this.cubes = []
 
     const cube = await createCube()
+
+    // Use ambient lights to light up the dark sides
     scene.add(ambientLight, mainLight, cube)
+
+    // Attach the mainLight to camera to light up the dark sides
+    // scene.add(cube)
+    // camera.add(mainLight)
+    // scene.add(camera)
 
     const controls = createControls(camera, renderer.domElement)  
 
