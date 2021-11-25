@@ -17,6 +17,10 @@ let loop
 class World {
   
   constructor (container) {
+    this.init(container)
+  }
+
+  async init (container) {
     camera = createCamera()
     scene = createScene()
     renderer = createRenderer()
@@ -25,7 +29,7 @@ class World {
 
     this.cubes = []
 
-    const cube = createCube()
+    const cube = await createCube()
     scene.add(cube, light)
 
     const controls = createControls(camera, renderer.domElement)  
@@ -34,6 +38,12 @@ class World {
     loop.updatables.push(controls)
     // loop.updatables.push(cube)
     const resizer = new Resizer(container, camera, renderer)
+
+    // Render on demand (user zoom/rotate/pan)
+    this.render()
+    controls.addEventListener('change', () => {
+      this.render()
+    })
   }
 
   render () {

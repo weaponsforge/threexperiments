@@ -6,21 +6,23 @@ import {
   TextureLoader
 } from '../../../vendor/three/build/three.module.js'
 
-const createMaterial = () => {
+const createMaterial = () => new Promise((resolve, reject) => {
   const textureLoader = new TextureLoader()
-  const texture = textureLoader.load('../assets/uv-test-bw.png')
+  const texture = textureLoader.load('../assets/uv-test-col.png', () => {
+    // Material
+    const material = new MeshStandardMaterial({ map: texture })
+    resolve(material)
+  })
+})
 
-  // Material
-  const material = new MeshStandardMaterial({ map: texture })
-  return material
-}
 
-const createCube = () => {
+
+const createCube = async () => {
   // Geometry
   const geometry = new BoxBufferGeometry(2, 2, 2)
 
   // Mesh
-  const material = createMaterial()
+  const material = await createMaterial()
   const cube = new Mesh(geometry, material)
   const tilt = MathUtils.degToRad(45)
   cube.rotation.set(tilt, tilt, 0)
