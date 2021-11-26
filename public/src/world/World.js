@@ -1,5 +1,7 @@
 import { createCamera } from './components/camera.js'
 import { createCube } from './components/cube.js'
+import { createSphere } from './components/sphere.js'
+import { createCylinder } from './components/cylinder.js'
 import { createScene } from './components/scene.js'
 import { createLight } from './components/light.js'
 
@@ -8,6 +10,12 @@ import { createControls } from './systems/controls.js'
 import { Resizer } from './systems/Resizer.js'
 import { Loop } from './systems/Loop.js'
 
+import {
+  createAxesHelper,
+  createGridHelper
+} from './components/helpers.js'
+import { Train } from './components/train/train.js'
+
 let camera
 let scene
 let renderer
@@ -15,7 +23,6 @@ let light
 let loop
 
 class World {
-  
   constructor (container) {
     this.init(container)
   }
@@ -27,33 +34,23 @@ class World {
     const { ambientLight, mainLight } = createLight()
     container.append(renderer.domElement)
 
-    this.cubes = []
-
-    const cube = await createCube()
+    const train = new Train()
 
     // Use ambient lights to light up the dark sides
-    scene.add(ambientLight, mainLight, cube)
+    scene.add(ambientLight, mainLight, train)
 
-    // Attach the mainLight to camera to light up the dark sides
-    // scene.add(cube)
-    // camera.add(mainLight)
-    // scene.add(camera)
-
-    const controls = createControls(camera, renderer.domElement)  
+    const controls = createControls(camera, renderer.domElement)
 
     loop = new Loop(camera, scene, renderer)
-    // loop.updatables.push(controls)
-    // loop.updatables.push(cube)
+    loop.updatables.push(controls, train)
+    this.start()
+
     const resizer = new Resizer(container, camera, renderer)
+    scene.add(createAxesHelper(), createGridHelper())
+
     resizer.onResize = () => {
       this.render()
     }
-
-    // Render on demand (user zoom/rotate/pan)
-    this.render()
-    controls.addEventListener('change', () => {
-      this.render()
-    })
   }
 
   render () {
