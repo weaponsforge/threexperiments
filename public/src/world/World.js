@@ -1,5 +1,4 @@
 import { createCamera } from './components/camera.js'
-import { createCube } from './components/cube.js'
 import { createScene } from './components/scene.js'
 import { createLight } from './components/light.js'
 
@@ -8,52 +7,56 @@ import { createControls } from './systems/controls.js'
 import { Resizer } from './systems/Resizer.js'
 import { Loop } from './systems/Loop.js'
 
+import { loadBirds } from './components/birds/birds.js'
+import { MathUtils } from '../../vendor/three/build/three.module.js'
+
 let camera
 let scene
 let renderer
-let light
 let loop
+let controls
 
 class World {
-  
   constructor (container) {
-    this.init(container)
-  }
-
-  async init (container) {
     camera = createCamera()
     scene = createScene()
     renderer = createRenderer()
-    const { ambientLight, mainLight } = createLight()
+    loop = new Loop(camera, scene, renderer)
     container.append(renderer.domElement)
 
-    this.cubes = []
+    this.birds = []
 
-    const cube = await createCube()
+    controls = createControls(camera, renderer.domElement)
+    controls.view = 'all'
+
+    const { ambientLight, mainLight } = createLight()
 
     // Use ambient lights to light up the dark sides
-    scene.add(ambientLight, mainLight, cube)
+    loop.updatables.push(controls)
+    scene.add(ambientLight, mainLight)
 
-    // Attach the mainLight to camera to light up the dark sides
-    // scene.add(cube)
-    // camera.add(mainLight)
-    // scene.add(camera)
-
-    const controls = createControls(camera, renderer.domElement)  
-
-    loop = new Loop(camera, scene, renderer)
-    // loop.updatables.push(controls)
-    // loop.updatables.push(cube)
     const resizer = new Resizer(container, camera, renderer)
     resizer.onResize = () => {
       this.render()
     }
 
-    // Render on demand (user zoom/rotate/pan)
-    this.render()
     controls.addEventListener('change', () => {
-      this.render()
+      const x = MathUtils.radToDeg(camera.rotation.x)
+      const y = MathUtils.radToDeg(camera.rotation.y)
+      const z = MathUtils.radToDeg(camera.rotation.z)
+      console.log(x, y, z)
     })
+  }
+
+  async init () {
+    const { parrot, flamingo, stork } = await loadBirds()
+    this.birds = [parrot, flamingo, stork]
+
+    controls._target = this.birds[0].position
+    controls._zoom = 30
+
+    controls.target.copy(parrot.position)
+    scene.add(parrot, flamingo, stork)
   }
 
   render () {
@@ -66,6 +69,54 @@ class World {
 
   stop () {
     loop.stop()
+  }
+
+  changeView (bird) {
+    switch (bird) {
+      case 'parrot':
+        controls.view = 'parrot'
+        controls._target = this.birds[0].position
+        controls._zoom = 10
+        /*
+        controls.target.copy(this.birds[0].position)
+        camera.position.x = this.birds[0].position.x
+        camera.position.y = this.birds[0].position.y
+        camera.position.z = 10
+        */
+        break
+      case 'flamingo':
+        controls.view = 'flamingo'
+        controls._target = this.birds[1].position
+        controls._rotation = this.birds[1].rotation
+        controls._zoom = 10
+        /*
+        controls.target.copy(this.birds[1].position)
+        camera.position.x = this.birds[1].position.x
+        camera.position.y = this.birds[1].position.y
+        camera.position.z = 10
+        */
+        break
+      case 'stork':
+        controls.view = 'stork'
+        controls._target = this.birds[2].position
+        controls._zoom = 30
+        /*
+        controls.target.copy(this.birds[2].position)
+        camera.position.x = this.birds[2].position.x
+        camera.position.y = this.birds[2].position.y
+        camera.position.z = 30
+        */
+        break
+      default:
+        controls.view = 'all'
+        controls._target = this.birds[0].position
+        controls._zoom = -30
+        /*
+        controls.target.copy(this.birds[0].position)
+        camera.position.z = -30
+        */
+        break
+    }
   }
 }
 
