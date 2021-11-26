@@ -15,6 +15,7 @@ import {
   createGridHelper
 } from './components/helpers.js'
 import { Train } from './components/train/train.js'
+import { Track } from './components/track/track.js'
 
 let camera
 let scene
@@ -35,9 +36,10 @@ class World {
     container.append(renderer.domElement)
 
     const train = new Train()
+    const track = new Track()
 
     // Use ambient lights to light up the dark sides
-    scene.add(ambientLight, mainLight, train)
+    scene.add(ambientLight, mainLight, train, track)
 
     const controls = createControls(camera, renderer.domElement)
 
