@@ -25,7 +25,7 @@ const createMeshes = () => {
   const board = new Mesh(geometries.board, materials.wood)
   board.rotation.x += Math.PI / 2
   board.rotation.z += Math.PI / 2
-  board.position.y -= 0.05
+  board.position.y -= 0.01
   board.position.x += 4.5  
   boards.add(board)
 
