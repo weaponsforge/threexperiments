@@ -9,6 +9,7 @@ class Train extends Group {
     super()
 
     this.meshes = createMeshes()
+    this.direction = 'forward'
 
     this.add(
       this.meshes.nose,
@@ -22,9 +23,25 @@ class Train extends Group {
   }
 
   tick (delta) {
-    const radians = MathUtils.degToRad(30)
-    // this.rotation.y += delta * radians
-    this.meshes.bigWheel.rotation.y += delta * radians
+    const radians = MathUtils.degToRad(25)
+    const deltaMultiplier = (this.direction === 'forward') ? 1 : -1
+    
+    // Spin wheels
+    this.meshes.smallWheelRear.rotation.y += delta * radians * deltaMultiplier
+    this.meshes.smallWheelCenter.rotation.y += delta * radians * deltaMultiplier
+    this.meshes.smallWheelFront.rotation.y += delta * radians * deltaMultiplier
+    this.meshes.bigWheel.rotation.y += delta * radians * deltaMultiplier
+
+    // Move train along the track
+    this.position.x -= delta * 1 * deltaMultiplier
+
+    if (this.position.x < -3) {
+      this.direction = 'back'
+    }
+
+    if (this.position.x > 3) {
+      this.direction = 'forward'
+    }
   }
 }
 
