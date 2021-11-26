@@ -1,12 +1,15 @@
 import { createCamera } from './components/camera.js'
 import { createCube } from './components/cube.js'
+import { createSphere } from './components/sphere.js'
 import { createScene } from './components/scene.js'
 import { createLight } from './components/light.js'
+import { createMeshGroup } from './components/meshGroup.js'
 
 import { createRenderer } from './systems/renderer.js'
 import { createControls } from './systems/controls.js'
 import { Resizer } from './systems/Resizer.js'
 import { Loop } from './systems/Loop.js'
+
 
 let camera
 let scene
@@ -15,7 +18,6 @@ let light
 let loop
 
 class World {
-  
   constructor (container) {
     this.init(container)
   }
@@ -27,12 +29,11 @@ class World {
     const { ambientLight, mainLight } = createLight()
     container.append(renderer.domElement)
 
-    this.cubes = []
-
-    const cube = await createCube()
+    // Sphere group
+    const meshGroup = await createMeshGroup()
 
     // Use ambient lights to light up the dark sides
-    scene.add(ambientLight, mainLight, cube)
+    scene.add(ambientLight, mainLight, meshGroup)
 
     // Attach the mainLight to camera to light up the dark sides
     // scene.add(cube)
@@ -42,18 +43,18 @@ class World {
     const controls = createControls(camera, renderer.domElement)  
 
     loop = new Loop(camera, scene, renderer)
-    // loop.updatables.push(controls)
-    // loop.updatables.push(cube)
+    loop.updatables.push(controls, meshGroup)
+
     const resizer = new Resizer(container, camera, renderer)
-    resizer.onResize = () => {
-      this.render()
-    }
+    this.start()
 
     // Render on demand (user zoom/rotate/pan)
+    /*
     this.render()
     controls.addEventListener('change', () => {
       this.render()
     })
+    */
   }
 
   render () {
