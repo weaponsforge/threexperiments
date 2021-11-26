@@ -1,7 +1,4 @@
 import { createCamera } from './components/camera.js'
-import { createCube } from './components/cube.js'
-import { createSphere } from './components/sphere.js'
-import { createCylinder } from './components/cylinder.js'
 import { createScene } from './components/scene.js'
 import { createLight } from './components/light.js'
 
@@ -20,7 +17,6 @@ import { Track } from './components/track/track.js'
 let camera
 let scene
 let renderer
-let light
 let loop
 
 class World {
