@@ -28,7 +28,7 @@ Hands-on experiments, concepts and best practices dev notes on ThreeJS [r134](ht
    - **dev** - basic ThreeJS setup  
 `git checkout dev`  
 ![dev](assets/dev.png)
-   - **group-organize** - manage multiplehes using the Group object  
+   - **group-organize** - manage multiple meshes using the Group object  
 `git checkout group`  
 ![group](assets/group.png)
    - **toy-train** - use ThreeJS primitives to create a Mesh  
